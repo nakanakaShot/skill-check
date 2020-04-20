@@ -1,6 +1,14 @@
 package q003;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Q003 集計と並べ替え
@@ -23,5 +31,52 @@ public class Q003 {
     private static InputStream openDataFile() {
         return Q003.class.getResourceAsStream("data.txt");
     }
+
+    public static void main(String[] args) {
+        InputStream is = Q003.openDataFile();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+        String resource;
+        Map<String, Integer> map = new HashMap<>();
+
+        try {
+            while ((resource = br.readLine()) != null) {
+                String DELIM = " ";
+                Arrays.asList(resource.split(DELIM)).forEach(
+                    word -> {
+                        word = excludeSpecialChar(word);
+
+                        if (isOnlySpecialChar(word)) {
+                            return;
+                        }
+
+                        if (map.containsKey(word)) {
+                            map.put(word, map.get(word) + 1);
+                        } else {
+                            map.put(word, 1);
+                        }
+                    }
+                );
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException();
+        }
+
+        map.entrySet().stream().sorted(Comparator.comparing(Entry::getKey))
+            .map(entry -> entry.getKey() + "=" + entry.getValue())
+            .forEach(System.out::println);
+
+    }
+
+    private static String excludeSpecialChar(String str) {
+        return str
+            .replace(".", "")
+            .replace("–", "")
+            .replace(",", "");
+    }
+
+    private static boolean isOnlySpecialChar(String str) {
+        return str.matches("-");
+    }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 28分
