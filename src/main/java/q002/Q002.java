@@ -1,5 +1,11 @@
 package q002;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 /**
  * Q002 並べ替える
  * <p>
@@ -37,5 +43,17 @@ public class Q002 {
         "14,林",
         "9,清水"
     };
+
+    public static void main(String[] args) {
+        List<String> list = Arrays.asList(dataList);
+        Map<Integer, String> map = new HashMap<>();
+
+        list.forEach(str -> {
+            String[] arr = str.split(",");
+            map.put(Integer.parseInt(arr[0]), arr[1]);
+        });
+
+        Stream.of(map).forEach(System.out::println);
+    }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 5分20秒
