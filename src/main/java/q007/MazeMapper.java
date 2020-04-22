@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import q007.model.Coordinate;
@@ -35,7 +36,7 @@ class MazeMapper extends Maze {
         );
     }
 
-    Coordinate findMinimumCostCoordinate() {
+    Optional<Coordinate> findMinimumCostCoordinate() {
         return mapMapper.entrySet().stream()
             .filter(entry -> {
                 MazeMappingStatus status = entry.getValue();
