@@ -35,6 +35,16 @@ class MazeMapper extends Maze {
         );
     }
 
+    Coordinate findMinimumCostCoordinate() {
+        return mapMapper.entrySet().stream()
+            .filter(entry -> {
+                MazeMappingStatus status = entry.getValue();
+                return status.isExplored() && status.isUnfixed();
+            }).sorted(Comparator.comparing(t -> t.getValue().getCost()))
+            .map(Entry::getKey)
+            .findFirst().orElseThrow(RuntimeException::new);
+    }
+
     void print() {
         AtomicInteger cnt = new AtomicInteger();
         getFlattenData().forEach(status -> {
