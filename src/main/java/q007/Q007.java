@@ -48,13 +48,10 @@ public class Q007 {
 
     public static void main(String[] args) {
         MazeData mazeData = readMazeData();
-        MazeMapper mazeMapper = MazeMapper.from(mazeData);
 
         mazeData.print();
 
-        MazeResult result = MazeResolver.resolve(mazeData, mazeMapper);
-
-        mazeMapper.print();
+        MazeResult result = MazeResolver.resolve(mazeData);
 
         System.out.println(result.getSteps());
     }
@@ -97,4 +94,4 @@ public class Q007 {
         }
     }
 }
-// 完成までの時間: 3時間 30分
+// 完成までの時間: 3時間 40分
