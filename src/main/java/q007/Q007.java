@@ -1,5 +1,15 @@
 package q007;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import q007.model.Coordinate;
+import q007.model.MazeInputType;
+
 /**
  * <pre>
  * q007 最短経路探索
@@ -30,5 +40,43 @@ package q007;
  */
 public class Q007 {
 
+    public static void main(String[] args) {
+        MazeData mazeData = readMazeData();
+        MazeMapper mazeMapper = MazeMapper.from(mazeData);
+
+        mazeData.print();
+        mazeMapper.print();
+    }
+
+    private static MazeData readMazeData() {
+        InputStream is = new MazeInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+        String resource;
+        Map<Coordinate, MazeInputType> maze = new HashMap<>();
+
+        try {
+            int width = -1;
+            AtomicInteger heightCount = new AtomicInteger();
+            while ((resource = br.readLine()) != null) {
+                if (width == -1) {
+                    width = resource.length();
+                }
+                AtomicInteger widthCount = new AtomicInteger();
+                resource.chars().forEach(
+                    character ->
+                        maze.put(
+                            new Coordinate(
+                                widthCount.getAndIncrement(),
+                                heightCount.getAndIncrement()
+                            )
+                            , MazeInputType.from(character))
+                );
+            }
+            return new MazeData(width, heightCount.get(), maze);
+        } catch (IOException ex) {
+            throw new RuntimeException();
+        }
+    }
 }
 // 完成までの時間: xx時間 xx分
