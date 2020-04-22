@@ -57,23 +57,30 @@ public class Q007 {
 
         try {
             int width = -1;
-            AtomicInteger heightCount = new AtomicInteger();
+            int height = 0;
             while ((resource = br.readLine()) != null) {
+                if (resource.isEmpty()) {
+                    break;
+                }
+
                 if (width == -1) {
                     width = resource.length();
                 }
                 AtomicInteger widthCount = new AtomicInteger();
+                int heightCount = height;
                 resource.chars().forEach(
                     character ->
                         maze.put(
                             new Coordinate(
                                 widthCount.getAndIncrement(),
-                                heightCount.getAndIncrement()
+                                heightCount
                             )
                             , MazeInputType.from(character))
                 );
+
+                height++;
             }
-            return new MazeData(width, heightCount.get(), maze);
+            return new MazeData(width, height, maze);
         } catch (IOException ex) {
             throw new RuntimeException();
         }
