@@ -42,7 +42,27 @@ class MazeMapper extends Maze {
                 return status.isExplored() && status.isUnfixed();
             }).sorted(Comparator.comparing(t -> t.getValue().getCost()))
             .map(Entry::getKey)
-            .findFirst().orElseThrow(RuntimeException::new);
+            .findFirst();
+    }
+
+    int getCost(Coordinate coordinate) {
+        return get(coordinate).getCost();
+    }
+
+    boolean isUnexplored(Coordinate coordinate) {
+        return get(coordinate).isUnexplored();
+    }
+
+    boolean isUnfixed(Coordinate coordinate) {
+        return get(coordinate).isUnfixed();
+    }
+
+    void mapping(Coordinate coordinate, int cost) {
+        get(coordinate).mapping(cost);
+    }
+
+    void fix(Coordinate coordinate) {
+        get(coordinate).fixThis();
     }
 
     void print() {
@@ -63,14 +83,22 @@ class MazeMapper extends Maze {
         System.out.println();
     }
 
-    private void validate() {
-        assert (getWidth() * getHeight() == mapMapper.size());
-    }
-
     private List<MazeMappingStatus> getFlattenData() {
         return mapMapper.entrySet().stream()
             .sorted(Comparator.comparing(t -> t.getKey().flattenIndex(getWidth())))
             .map(Entry::getValue)
             .collect(Collectors.toList());
+    }
+
+    private MazeMappingStatus get(Coordinate coordinate) {
+        return mapMapper.entrySet().stream()
+            .filter(entry ->
+                entry.getKey().equals(coordinate))
+            .map(Entry::getValue)
+            .findFirst().orElseThrow(RuntimeException::new);
+    }
+
+    private void validate() {
+        assert (getWidth() * getHeight() == mapMapper.size());
     }
 }

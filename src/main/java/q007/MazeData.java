@@ -54,6 +54,18 @@ class MazeData extends Maze {
         System.out.println();
     }
 
+    boolean canMove(Coordinate coordinate) {
+        return get(coordinate).canMove();
+    }
+
+    private MazeInputType get(Coordinate coordinate) {
+        return mapData.entrySet().stream()
+            .filter(entry ->
+                entry.getKey().equals(coordinate))
+            .map(Entry::getValue)
+            .findFirst().orElseThrow(RuntimeException::new);
+    }
+
     private void validate() {
         assert (getWidth() * getHeight() == mapData.size());
     }
