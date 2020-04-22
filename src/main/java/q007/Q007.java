@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import q007.model.Coordinate;
 import q007.model.MazeInputType;
+import q007.model.MazeResult;
 
 /**
  * <pre>
@@ -40,12 +41,22 @@ import q007.model.MazeInputType;
  */
 public class Q007 {
 
+    private static InputStream openDataFile() {
+        return Q007.class.getResourceAsStream("data.txt");
+    }
+
+
     public static void main(String[] args) {
         MazeData mazeData = readMazeData();
         MazeMapper mazeMapper = MazeMapper.from(mazeData);
 
         mazeData.print();
+
+        MazeResult result = MazeResolver.resolve(mazeData, mazeMapper);
+
         mazeMapper.print();
+
+        System.out.println(result.getSteps());
     }
 
     private static MazeData readMazeData() {
@@ -86,4 +97,4 @@ public class Q007 {
         }
     }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 3時間 30分
