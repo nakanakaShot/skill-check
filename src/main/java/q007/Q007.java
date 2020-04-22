@@ -1,5 +1,16 @@
 package q007;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import q007.model.Coordinate;
+import q007.model.MazeInputType;
+import q007.model.MazeResult;
+
 /**
  * <pre>
  * q007 最短経路探索
@@ -30,5 +41,57 @@ package q007;
  */
 public class Q007 {
 
+    private static InputStream openDataFile() {
+        return Q007.class.getResourceAsStream("data.txt");
+    }
+
+
+    public static void main(String[] args) {
+        MazeData mazeData = readMazeData();
+
+        mazeData.print();
+
+        MazeResult result = MazeResolver.resolve(mazeData);
+
+        System.out.println(result.getSteps());
+    }
+
+    private static MazeData readMazeData() {
+        InputStream is = new MazeInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+        String resource;
+        Map<Coordinate, MazeInputType> maze = new HashMap<>();
+
+        try {
+            int width = -1;
+            int height = 0;
+            while ((resource = br.readLine()) != null) {
+                if (resource.isEmpty()) {
+                    break;
+                }
+
+                if (width == -1) {
+                    width = resource.length();
+                }
+                AtomicInteger widthCount = new AtomicInteger();
+                int heightCount = height;
+                resource.chars().forEach(
+                    character ->
+                        maze.put(
+                            new Coordinate(
+                                widthCount.getAndIncrement(),
+                                heightCount
+                            )
+                            , MazeInputType.from(character))
+                );
+
+                height++;
+            }
+            return new MazeData(width, height, maze);
+        } catch (IOException ex) {
+            throw new RuntimeException();
+        }
+    }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 3時間 40分
