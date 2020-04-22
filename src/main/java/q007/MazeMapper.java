@@ -8,13 +8,13 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import q007.model.Coordinate;
+import q007.model.MazeMappingStatus;
 
 class MazeMapper extends Maze {
 
-    private static final int UNEXPLORED_NUMBER = -1;
-    private final Map<Coordinate, Integer> mapMapper;
+    private final Map<Coordinate, MazeMappingStatus> mapMapper;
 
-    private MazeMapper(int width, int height, Map<Coordinate, Integer> mapMapper) {
+    private MazeMapper(int width, int height, Map<Coordinate, MazeMappingStatus> mapMapper) {
         super(width, height);
         this.mapMapper = mapMapper;
 
@@ -22,11 +22,11 @@ class MazeMapper extends Maze {
     }
 
     static MazeMapper from(MazeData data) {
-        Map<Coordinate, Integer> map = new HashMap<>();
+        Map<Coordinate, MazeMappingStatus> map = new HashMap<>();
 
         data.correctAllCoordinates()
             .forEach(coordinate ->
-                map.put(coordinate, UNEXPLORED_NUMBER));
+                map.put(coordinate, MazeMappingStatus.init()));
 
         return new MazeMapper(
             data.getWidth(),
@@ -37,12 +37,12 @@ class MazeMapper extends Maze {
 
     void print() {
         AtomicInteger cnt = new AtomicInteger();
-        getFlattenData().forEach(cost -> {
+        getFlattenData().forEach(status -> {
 
-            if (cost == UNEXPLORED_NUMBER) {
+            if (status.isUnexplored()) {
                 System.out.print(" - ");
             } else {
-                System.out.print(String.format(" %02d", cost));
+                System.out.print(String.format(" %02d", status.getCost()));
             }
 
             if (cnt.getAndIncrement() != 0 && cnt.get() % getWidth() == 0) {
@@ -57,7 +57,7 @@ class MazeMapper extends Maze {
         assert (getWidth() * getHeight() == mapMapper.size());
     }
 
-    private List<Integer> getFlattenData() {
+    private List<MazeMappingStatus> getFlattenData() {
         return mapMapper.entrySet().stream()
             .sorted(Comparator.comparing(t -> t.getKey().flattenIndex(getWidth())))
             .map(Entry::getValue)
