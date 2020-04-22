@@ -26,6 +26,34 @@ public class Coordinate {
         );
     }
 
+    public Coordinate up(int steps) {
+        return new Coordinate(
+            x,
+            y - steps
+        );
+    }
+
+    public Coordinate down(int steps) {
+        return new Coordinate(
+            x,
+            y + steps
+        );
+    }
+
+    public Coordinate left(int steps) {
+        return new Coordinate(
+            x - steps,
+            y
+        );
+    }
+
+    public Coordinate right(int steps) {
+        return new Coordinate(
+            x + steps,
+            y
+        );
+    }
+
     /**
      * 2次元配列座標 -> 1次元配列インデックス
      *
