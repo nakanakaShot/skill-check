@@ -18,7 +18,7 @@ public class MazeMappingStatus {
         );
     }
 
-    public int getCost() {
+    public Integer getCost() {
         return cost;
     }
 
@@ -34,7 +34,15 @@ public class MazeMappingStatus {
         return fixed;
     }
 
-    public void explore(int newCost) {
+    public boolean isUnfixed() {
+        return !isFixed();
+    }
+
+    public void mapping(int newCost) {
         this.cost = newCost;
+    }
+
+    public void fixThis() {
+        this.fixed = true;
     }
 }
