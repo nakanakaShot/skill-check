@@ -30,17 +30,19 @@ class MazeResolver {
         int minCost;
 
         // ダイクストラ法　手順2：　開始地点をコスト0でマッピング
-        init(mazeData, mazeMapper);
+        mappingStartCoordinate(mazeData, mazeMapper);
 
-        // ダイクストラ法　手順3：　未確定のマスがなくなるまで繰り返す
+        // ダイクストラ法　手順3：　探索可能な全てのマスのコストを確定させるまで繰り返す
         while (true) {
+            // 終了地点に到達できない = 終了地点のマスのコストが更新されないため、-1のままになる
 
             // ダイクストラ法　手順3-a：　未確定のマスの中で最もコストが小さい頂点を取得する
             minCostCoordinate = mazeMapper.findMinimumCostCoordinate();
             if (!minCostCoordinate.isPresent()) {
                 break;
             }
-            // ダイクストラ法　手順3-b：　未確定のマスの中で最もコストが小さい頂点を確定させる
+            // ダイクストラ法　手順3-b：　未確定のマスの中で最もコストが小さい頂点を確定させる(今後探索対象にしない)
+            // 1度探索した経路を再探索させないため
             mazeMapper.fix(minCostCoordinate.get());
 
             // ダイクストラ法　手順3-c：　隣接するマスに移動するコストを加算
@@ -69,7 +71,7 @@ class MazeResolver {
         return new MazeResult(steps);
     }
 
-    private static void init(MazeData mazeData, MazeMapper mazeMapper) {
+    private static void mappingStartCoordinate(MazeData mazeData, MazeMapper mazeMapper) {
         Coordinate start = mazeData.findStartCoordinate();
         mazeMapper.mapping(start, INITIAL_COST);
     }
