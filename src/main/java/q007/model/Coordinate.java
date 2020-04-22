@@ -19,7 +19,7 @@ public class Coordinate {
      * @param width 幅
      * @return 2次元配列インデックス
      */
-    static Coordinate extractIndex(int index, int width) {
+    public static Coordinate extractIndex(int index, int width) {
         return new Coordinate(
             index % width,
             index / width
@@ -32,7 +32,7 @@ public class Coordinate {
      * @param width 幅
      * @return 1次元配列インデックス
      */
-    int flattenIndex(int width) {
+    public Integer flattenIndex(int width) {
         return (y * width + x);
     }
 
