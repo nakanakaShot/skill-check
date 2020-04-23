@@ -1,5 +1,13 @@
 package q009;
 
+import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Scanner;
+
 /**
  * <pre>
  * Q009 重い処理を別スレッドで実行
@@ -27,5 +35,83 @@ package q009;
  */
 public class Q009 {
 
+    public static void main(String[] args) {
+
+        Map<BigDecimal, PrimeFactorize> executors = new HashMap<>();
+
+        while (true) {
+            Optional<BigDecimal> input = readIntegerFromStd();
+
+            if (!input.isPresent()) {
+                printStatus(executors);
+                continue;
+            }
+
+            if (input.get().equals(BigDecimal.ZERO)) {
+                if (confirmExit()) {
+                    break;
+                }
+                continue;
+            }
+
+            PrimeFactorize primeFactorize = awaitPrimeFactorize(input.get());
+            primeFactorize.start();
+            executors.put(input.get(), primeFactorize);
+        }
+        System.out.println("終了中...");
+        executors.values().forEach(
+            primeFactorize -> {
+                try {
+                    primeFactorize.join();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+        System.out.println("実行結果");
+        printStatus(executors);
+    }
+
+    private static PrimeFactorize awaitPrimeFactorize(BigDecimal target) {
+        return new PrimeFactorize(target);
+    }
+
+    private static void printStatus(Map<BigDecimal, PrimeFactorize> map) {
+        map.entrySet().stream().sorted(Comparator.comparing(Entry::getKey))
+            .forEach(entry -> printStatus(entry.getKey(), entry.getValue()));
+    }
+
+    private static void printStatus(BigDecimal value, PrimeFactorize cf) {
+        String status = cf.isAlive() ? "実行中" : cf.getCanDivide().toString();
+        System.out.println(value + ": " + status);
+    }
+
+    private static Optional<BigDecimal> readIntegerFromStd() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("■素因数分解する整数を入力してください。(整数: 処理実行, 0: 終了)");
+
+        String input = sc.nextLine();
+
+        if (input.isEmpty()) {
+            return Optional.empty();
+        }
+
+        try {
+            return Optional.of(
+                BigDecimal.valueOf(Long.parseLong(input))
+            );
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException();
+        }
+    }
+
+    private static boolean confirmExit() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("処理を終了しますか？(y/N)");
+        String input = sc.nextLine();
+
+        return "y".equals(input.toLowerCase());
+    }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 1時間 40分
