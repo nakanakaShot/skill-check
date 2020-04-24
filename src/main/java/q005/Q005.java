@@ -73,4 +73,4 @@ public class Q005 {
         return new WorkDataList(list);
     }
 }
-// 完成までの時間: 65分
+// 完成までの時間: 1時間 5分

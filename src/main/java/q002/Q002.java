@@ -56,4 +56,4 @@ public class Q002 {
         Stream.of(map).forEach(System.out::println);
     }
 }
-// 完成までの時間: 5分20秒
+// 完成までの時間: 6分

@@ -11,4 +11,4 @@ public class Q001 {
         System.out.println("Hello World!");
     }
 }
-// 完成までの時間: 20秒
+// 完成までの時間: 1分
