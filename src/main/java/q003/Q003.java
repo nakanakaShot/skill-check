@@ -50,10 +50,12 @@ public class Q003 {
                             return;
                         }
 
-                        if (map.containsKey(word)) {
-                            map.put(word, map.get(word) + 1);
+                        String converted = convertToLowerCaseExceptI(word);
+
+                        if (map.containsKey(converted)) {
+                            map.put(converted, map.get(converted) + 1);
                         } else {
-                            map.put(word, 1);
+                            map.put(converted, 1);
                         }
                     }
                 );
@@ -78,5 +80,12 @@ public class Q003 {
     private static boolean isOnlySpecialChar(String str) {
         return str.matches("-");
     }
+
+    private static String convertToLowerCaseExceptI(String target) {
+        if ("I".equals(target)) {
+            return target;
+        }
+        return target.toLowerCase();
+    }
 }
-// 完成までの時間: 28分
+// 完成までの時間: 30分
